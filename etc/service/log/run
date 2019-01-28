@@ -1,0 +1,8 @@
+#!/bin/bash -e
+mkdir -p /var/log/apacheds
+chown nobody:nogroup /var/log/apacheds
+
+exec chpst -u nobody:nogroup svlogd -tt /var/log/apacheds
+
+trap shutdown INT TERM
+chpst -u $APACHEDS_USER:$APACHEDS_GROUP exec tail -n 0 --pid=$(cat $PIDFILE) -f /var/log/apacheds/apacheds.log

@@ -1,4 +1,4 @@
-#!/usr/local/bin/dumb-init /bin/bash
+#!/bin/bash
 
 # Environment variables:
 # APACHEDS_VERSION
@@ -29,13 +29,10 @@ cleanup(){
 trap cleanup EXIT
 cleanup
 
-/opt/apacheds-${APACHEDS_VERSION}/bin/apacheds start ${APACHEDS_INSTANCE}
+chpst -u $APACHEDS_USRE:$APACHEDS_GROUP exec /opt/apacheds-${APACHEDS_VERSION}/bin/apacheds start ${APACHEDS_INSTANCE}
 sleep 2  # Wait on new pid
 
 shutdown(){
     echo "Shutting down..."
     /opt/apacheds-${APACHEDS_VERSION}/bin/apacheds stop ${APACHEDS_INSTANCE}
 }
-
-trap shutdown INT TERM
-tail -n 0 --pid=$(cat $PIDFILE) -f ${APACHEDS_INSTANCE_DIRECTORY}/log/apacheds.log

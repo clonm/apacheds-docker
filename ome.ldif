@@ -6,18 +6,18 @@ objectClass: domain
 objectClass: top
 dc: org
 
-dn: dc=openmicroscopy,dc=org
+dn: dc=cloyne,dc=org
 objectClass: extensibleObject
 objectClass: domain
 objectClass: top
-dc: openmicroscopy
+dc: cloyne
 
-dn: ou=Users,dc=openmicroscopy,dc=org
+dn: ou=Users,dc=cloyne,dc=org
 objectClass: organizationalUnit
 objectClass: top
 ou: Users
 
-dn: ou=Groups,dc=openmicroscopy,dc=org
+dn: ou=Groups,dc=cloyne,dc=org
 objectClass: organizationalUnit
 objectClass: top
 ou: Groups

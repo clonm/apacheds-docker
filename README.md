@@ -31,6 +31,7 @@ Then you can import entries into that partition via your own *ldif* file:
 
     ldapadd -v -h <your-docker-ip>:389 -c -x -D uid=admin,ou=system -w <your-admin-password> -f sample.ldif
 
+For testing, you can poke around with [Apache Directory Studio](https://directory.apache.org/studio/) as an LDAP client.
 
 ## Customization
 

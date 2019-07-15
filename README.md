@@ -25,7 +25,7 @@ The container can be started issuing the following command:
 
 You can manage the ldap server with the admin user *uid=admin,ou=system* and the default password *secret*. The *default* instance comes with a pre-configured partition *dc=openmicroscopy,dc=org*.
 
-An indivitual admin password should be set following [this manual](https://directory.apache.org/apacheds/basic-ug/1.4.2-changing-admin-password.html).
+An individual admin password should be set following [this manual](https://directory.apache.org/apacheds/basic-ug/1.4.2-changing-admin-password.html).
 
 Then you can import entries into that partition via your own *ldif* file:
 

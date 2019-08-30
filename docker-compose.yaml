@@ -1,0 +1,7 @@
+version: '3.2'
+services:
+  ldap:
+    build: .
+    container_name: ldap
+    ports:
+      - "389:10389"

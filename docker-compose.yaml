@@ -2,6 +2,14 @@ version: '3.2'
 services:
   ldap:
     build: .
+    image: clonm/apacheds
     container_name: ldap
     ports:
       - "389:10389"
+      - "636:10636"
+      - "464:60464"
+      - "80:8080"
+      - "443:8443"
+    volumes:
+      - /srv/apacheds/data:/var/lib/apacheds
+      - /srv/log/apacheds:/var/log/apacheds

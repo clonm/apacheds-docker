@@ -9,7 +9,8 @@ The project sources can be found on [GitHub](https://github.com/openmicroscopy/a
 ## Build
 
     git clone https://github.com/clonm/apacheds-docker.git
-    docker build -t clonm/apacheds apacheds-docker
+    cd apacheds-docker
+    docker build -t clonm/apacheds .
 
 
 ## Installation
@@ -20,18 +21,49 @@ The container can be started issuing the following command:
 
     docker run --name ldap -d -p 389:10389 clonm/apacheds
 
+There is also a docker-compose file that does the same thing
+
+    docker-compose up
+
+(use `-d` to start in detached mode)
 
 ## Usage
 
-You can manage the ldap server with the admin user *uid=admin,ou=system* and the default password *secret*. The *default* instance comes with a pre-configured partition *dc=openmicroscopy,dc=org*.
+You can manage the ldap server with the admin user *uid=admin,ou=system* and the default password *secret*. The *default* instance comes with a pre-configured partition *dc=cloyne,dc=org*.
 
 An individual admin password should be set following [this manual](https://directory.apache.org/apacheds/basic-ug/1.4.2-changing-admin-password.html).
 
-Then you can import entries into that partition via your own *ldif* file:
+Then (from inside the container) you can import entries into that partition via
+your own *ldif* file:
 
     ldapadd -v -h <your-docker-ip>:389 -c -x -D uid=admin,ou=system -w <your-admin-password> -f sample.ldif
 
-For testing, you can poke around with [Apache Directory Studio](https://directory.apache.org/studio/) as an LDAP client.
+## Testing
+
+For testing, you can poke around with [Apache Directory
+Studio](https://directory.apache.org/studio/) as an LDAP client. After
+downloading and installing,
+1. run the server container with `docker-compose up`
+2. In ApacheDirectoryStudio, go to the *LDAP* menu -> *New Connection...*
+    1. In *Connection Name*, put whatever you want, e.g. *ldap_test*
+    1. For *Hostname*, put `localhost`
+    1. Leave the rest of the settings as default and Click *Check Network
+       Parameter*. It should say "The connection was
+       established successfully".
+    1. Click *Next >* For *Bind DN or user*, put `uid=admin,ou=system`
+    1. For *Bind password*, put `secret`
+    1. Click *Check Network Parameter*. It should say "The authentication was
+       successful".
+
+### Troubleshooting
+* If you get `ERR_04110_CANNOT_CONNECT_TO_SERVER`, you probably forgot to start
+   the server. Use `docker ps` to check what containers are running, and restart
+   if necessary.
+* If you get `ERR_04169_RESPONSE_QUEUE_EMPTIED`: the *Bind DN or user* parameter
+    is wrong. It should be `uid=admin,ou=system`.
+* If you get `ERR_04160_SESSION_HAS_BEEN_CLOSED`: the *Bind DN or user* parameter
+    is wrong. It should be `uid=admin,ou=system`.
+
 
 ## Customization
 

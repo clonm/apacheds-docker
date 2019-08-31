@@ -1,0 +1,31 @@
+#!/bin/sh -E
+
+# Environment variables:
+# APACHEDS_VERSION
+# APACHEDS_INSTANCE
+# APACHEDS_BOOTSTRAP
+# APACHEDS_DATA
+# APACHEDS_USER
+# APACHEDS_GROUP
+
+APACHEDS_INSTANCE_DIRECTORY=${APACHEDS_DATA}/${APACHEDS_INSTANCE}
+PIDFILE="${APACHEDS_INSTANCE_DIRECTORY}/run/apacheds-${APACHEDS_INSTANCE}.pid"
+
+cleanup(){
+    if [ -e "${PIDFILE}" ];
+    then
+        echo "Cleaning up ${PIDFILE}"
+        rm "${PIDFILE}"
+    fi
+}
+
+trap cleanup EXIT
+cleanup
+
+shutdown(){
+    echo "Shutting down..."
+    /opt/apacheds-${APACHEDS_VERSION}/bin/apacheds stop ${APACHEDS_INSTANCE}
+}
+
+trap shutdown INT TERM
+exec chpst -u ${APACHEDS_USER}:${APACHEDS_GROUP} tail -n 0 --pid=$(cat $PIDFILE) -f ${APACHEDS_INSTANCE_DIRECTORY}/log/apacheds.log

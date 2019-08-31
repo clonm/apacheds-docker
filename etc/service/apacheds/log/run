@@ -2,4 +2,4 @@
 mkdir -p /var/log/apacheds
 chown nobody:nogroup /var/log/apacheds
 
-exec chpst -u nobody:nogroup svlogd -tt /var/log/apacheds
+exec chpst -u nobody:nogroup svlogd -tt /var/log/apacheds/

@@ -17,4 +17,13 @@ if [ ! -d ${APACHEDS_INSTANCE_DIRECTORY} ]; then
     chown -v -R ${APACHEDS_USER}:${APACHEDS_GROUP} ${APACHEDS_INSTANCE_DIRECTORY}
 fi
 
-exec chpst -u $APACHEDS_USER:$APACHEDS_GROUP /opt/apacheds-${APACHEDS_VERSION}/bin/apacheds start ${APACHEDS_INSTANCE}
+INSTALLATION_DIRECTORY="/opt/apacheds-${APACHEDS_VERSION}"
+WRAPPER_CMD="$INSTALLATION_DIRECTORY/bin/wrapper"
+WRAPPER_CONF="$APACHEDS_INSTANCE_DIRECTORY/conf/wrapper-instance.conf"
+PIDDIR=$INSTANCE_DIRECTORY/run
+
+echo "Starting ApacheDS - ${APACHEDS_INSTANCE}"
+# The string passed to eval must handle spaces in paths correctly
+COMMAND_LINE="chpst -u $APACHEDS_USER:$APACHEDS_GROUP $INSTALLATION_DIRECTORY/bin/wrapper $WRAPPER_CONF set.INSTANCE_DIRECTORY=\"${APACHEDS_INSTANCE_DIRECTORY}\" set.APACHEDS_COMMAND=\"start\" set.INSTANCE=\"$APACHEDS_INSTANCE\" wrapper.syslog.ident=\"apacheds\" wrapper.daemonize=FALSE"
+echo "Command: $COMMAND_LINE"
+exec $COMMAND_LINE 2>&1
